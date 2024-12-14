@@ -1,0 +1,39 @@
+<!DOCKTYPE html>
+<html lang="en">
+<head>
+	<style>
+		button {width: 33%; aspect-ratio: 1; font-size: 60;}
+		img {width: 100%;}
+	</style>
+	<script>
+		function change_frame_source(frame_url) {
+			document.getElementById("frame_display").src = frame_url
+		}
+	
+		function on_frame_captured(response) {
+			if (!response.ok) {
+				alert("response not ok")
+				}
+			else {
+			    response.text().then(change_frame_source)
+		    }
+		}
+		function on_capture_frame_clicked() {
+			fetch('capture_frame').then(on_frame_captured)
+			
+		}
+	</script>
+	<title>BOT control</title>
+</head>
+<body>
+	<h1> BOT control </h1>
+	<br/>
+	<button onclick="on_capture_frame_clicked()"> &#128247; </button>
+	<button onclick="fetch('forward')"> &uarr; </button>
+	<button onclick="fetch('toggle_light')"> &#9735; </button>
+	<button onclick="fetch('turn_left')"> &larr; </button>
+	<button onclick="fetch('backward')"> &darr; </button>
+	<button onclick="fetch('turn_right')"> &rarr; </button>
+	<img id="frame_display" src="" alt="no image">
+</body>
+</html>
