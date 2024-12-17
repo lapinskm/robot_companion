@@ -4,10 +4,10 @@ import os
 import uuid
 
 import cv2
-import flask
 from flask import Flask, request, jsonify
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+from pyslam.feature_tracker import FeatureTrackerTypes
 from pyslam.slam import Slam, Camera
 
 SLAM_SERVICE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -37,8 +37,9 @@ class SlamSession(Slam):
     def __init__(self) -> None:
         camera_intrinsics = self.load_camera_intrinsics()
         # Initialize monocular SLAM
-        super().__init__(camera=Camera(None).init_from_json(camera_intrinsics),
-             feature_tracker_config={})
+        camera = Camera(None)
+        camera.init_from_json(camera_intrinsics)
+        super().__init__(camera=camera, feature_tracker_config={"tracker_type": FeatureTrackerTypes.DES_FLANN})
         self.__last_img_id = -1
         self.__id = str(uuid.uuid4())
 
